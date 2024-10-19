@@ -33,3 +33,39 @@ A real-time scoreboard application for fitness competitions, built using Python,
    git clone https://github.com/yourusername/fitness-competition-scoreboard.git
    cd fitness-competition-scoreboard
 
+2. Navigate into the project directory:
+bash
+cd yourproject
+
+3. Create a virtual environment (optional but recommended):
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+
+4. Install the dependencies:
+pip install -r requirements.txt
+
+5.Run the app: 
+flask run
+
+The app will now be running at http://localhost:5000/.
+
+### Usage
+Coaches can input team results via the input page.
+The scoreboard updates every 15-30 seconds.
+Athletes can view the scoreboard but cannot edit the results.
+
+### Contributing
+To contribute:
+
+1. Fork the repository.
+  
+2. Create a new branch:
+bash
+git checkout -b feature-branch-name
+
+3. Make your changes.
+
+4. Push to your branch:
+git push origin feature-branch-name
+
+5. Submit a pull request with a description of your changes.
