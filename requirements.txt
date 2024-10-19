@@ -8,3 +8,7 @@ python-socketio==5.3.0
 SQLAlchemy==1.4.22
 Flask-Login==0.5.0
 WTForms==2.3.3
+
+###Generate this with:
+###bash
+###pip freeze > requirements.txt
