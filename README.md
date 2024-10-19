@@ -49,6 +49,10 @@ flask run
 
 The app will now be running at http://localhost:5000/.
 
+## Running Tests
+To run tests, use:
+python -m unittest discover -s tests
+
 ## Usage
 Admin Access: Allows full control over teams, users, and scores.
 Coach Access: Can input scores but cannot modify teams or view sensitive data.
