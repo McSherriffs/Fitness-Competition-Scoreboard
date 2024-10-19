@@ -49,12 +49,28 @@ flask run
 
 The app will now be running at http://localhost:5000/.
 
-### Usage
+## Usage
+Admin Access: Allows full control over teams, users, and scores.
+Coach Access: Can input scores but cannot modify teams or view sensitive data.
+Athlete Access: Can only view the scoreboard.
+
 Coaches can input team results via the input page.
 The scoreboard updates every 15-30 seconds.
 Athletes can view the scoreboard but cannot edit the results.
 
-### Contributing
+## Deployment
+ - Deploy to Heroku (or another platform):
+
+ - Ensure you have a Procfile for Heroku:
+bash
+web: gunicorn app:app
+
+- Add requirements.txt and runtime.txt (for Python version).
+
+- Use a database service like Postgres for production.
+
+
+## Contributing
 To contribute:
 
 1. Fork the repository.
