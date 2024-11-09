@@ -38,4 +38,4 @@ Copy code
 Here’s how to create these files directly in GitHub:
 
 1. **Go to Your Repository** on GitHub.
-2. **Click the "Add
+2. **Click the "Add"
