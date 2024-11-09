@@ -2,6 +2,33 @@
 
 A real-time scoreboard application for fitness competitions, built using Python, Flask, and Socket.IO. This app allows coaches to input exercise scores for their teams, which are then dynamically updated on a scoreboard viewable by all participants.
 
+## Main Components
+Database Model:
+
+Team: id, name, athletes (3-4), round_scores (list of scores), total_score, rank.
+Exercise: id, name, type, team_id, round_id, score.
+User: id, username, role (admin/coach/athlete), password.
+Round: id, round_number, date.
+Backend Logic:
+
+Teams will be able to submit their scores per round for different exercises.
+An admin or coach will input the scores; the results will be calculated automatically (using predefined rules) and stored.
+The system will calculate total team scores and ranks after each round.
+A scoreboard will refresh every 15-30 seconds dynamically.
+Roles & Permissions:
+
+Admin: Can access all pages (input, view scoreboards, modify data).
+Coach: Can only input team scores but can't modify other parts of the system.
+Athlete: Can view scoreboards but can't input or modify anything.
+Pages:
+
+Login Page: User authentication.
+Input Results Page (restricted to coaches and admin).
+Scoreboard Page: Displays results for all teams, refreshing periodically.
+Team Rank Page: Displays teams ranked by score.
+Admin Dashboard: Overview and administrative control for data.
+
+
 ## Features
 
 - Manage teams and athletes for a competition.
