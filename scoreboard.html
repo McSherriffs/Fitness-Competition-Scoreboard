@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scoreboard</title>
+  <!-- Link to an external CSS file for styling -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h1>Team Scoreboard</h1>
+  <!-- Table to display team scores -->
+  <table>
+    <thead>
+      <tr>
+        <th>Team</th>
+        <th>Total Score</th>
+        <th>Rank</th>
+      </tr>
+    </thead>
+    <tbody id="scoreboard-body">
+      <!-- Loop through teams and display each team’s name, total score, and rank -->
+      {% for team in teams %}
+      <tr>
+        <td>{{ team.name }}</td>
+        <td>{{ team.total_score }}</td>
+        <td>{{ team.rank }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Include Socket.IO library for real-time updates -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+  <script>
+    // Establish connection with the server via Socket.IO
+    var socket = io();
+
+    // Listen for the 'update_scoreboard' event from the server
+    socket.on('update_scoreboard', function(data) {
+      // When event is received, reload the page to show the updated scoreboard
+      location.reload();
+    });
+  </script>
+</body>
+</html>

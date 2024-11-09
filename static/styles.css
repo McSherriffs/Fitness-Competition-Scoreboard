@@ -1,0 +1,41 @@
+/* General styling for the whole page */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+/* Header section styling */
+header {
+    background-color: #333; /* dark background for contrast*/
+    color: #fff;
+    padding: 10px;
+    text-align: centre;
+}
+
+/* Main container for content */
+.container {
+    max-width: 800px; /* limiting width to be able to read it better */
+    margin: 20px auto; /* centre the content */
+    padding: 20px;
+    background: #fff; /* white background */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: centre;
+}
+
+th {
+    background-color: #333;
+    color: white;
+}
