@@ -1,6 +1,6 @@
 ###This file lists all the Python packages your project depends on.
 
-```txt
+txt
 Flask==2.1.1
 Flask-SQLAlchemy==2.5.1
 Flask-SocketIO==5.1.1
