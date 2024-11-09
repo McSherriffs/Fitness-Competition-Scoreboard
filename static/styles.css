@@ -21,21 +21,24 @@ header {
     margin: 20px auto; /* centre the content */
     padding: 20px;
     background: #fff; /* white background */
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* adding a shadow for depth, not sure if this will affect visual */
 }
 
+/* table styling for team data */
 table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: collapse; /* to take away the spacing between cells */
 }
 
+/* Cell borders and padding */
 table, th td {
-    border: 1px solid #ccc;
+    border: 1px solid #ccc; /* light */
     padding: 8px;
-    text-align: centre;
+    text-align: centre; /* centralise the text in the cells - may left margin */
 }
 
+/* Add a header the cells in the table */
 th {
-    background-color: #333;
-    color: white;
+    background-color: #333; /* Dark background for  the headers */
+    color: white; /* white text for readability */
 }

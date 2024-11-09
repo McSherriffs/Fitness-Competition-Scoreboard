@@ -2,9 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Scoreboard</title>
+    <!-- Link to the CSS style sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <!-- Header Section -->
+    <header><h1> Fitness Competition Scoreboard</h1></header>
 
+    <!-- Main content container -->
+    <div class="container">
+        <h2>Current Scores</h2>
+
+        <!-- Table displaying team names and scores -->
+        <table>
+            <tr>
+               <th>Team</th>
+               <th>Scores</th>
+            </tr>
+            {% for team in teams %}
+
+            <tr>
+               <td>{{ team.name }}</td> <!-- Displays the team name -->
+               <td>{{ team.score }}</td> <!-- Displays the teams score -->
+            </tr>
+            {% endfor %}
+        <br>
+        </table>
+        <br>
+        <br>
+        <!--Link to the input results page for coaches -->
+        <a href="{{ url_for('input_results') }}">Enter Results</a>
+    </div>
 </body>
 </html>
