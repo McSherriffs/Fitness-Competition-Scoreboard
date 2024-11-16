@@ -60,3 +60,4 @@ def update_score():
     This will update the score of an existing participant in the database.
     It expects participant IF and a new score from a form submission
     """
+    particpant_id = int(request_forn['id'])
