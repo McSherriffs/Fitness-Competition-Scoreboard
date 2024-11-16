@@ -1,85 +1,62 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
-from models import db, Team, Exercise, User, Round
-from flask_login import login_user, logout_user, login_required, current_user
-from forms import ScoreInputForm, LoginForm
-from flask_socketio import SocketIO
+from flask import Flask, render_template, request, redirect
+import sqlite3
 
-# Initialize the Flask app
-app = Flask(__name__)
+#Initialise Flask app
+app = Flask(_name_)
 
-# Set the database URI and secret key for session management
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fitness_competition.db'
-app.config['SECRET_KEY'] = 'your-secret-key'  #TODO Replace with your actual secret key
+# Function to initialise the database (this should only run when the app starts)
+def init_db():
+    """
+    This function sets up the SQLite database if it doesn't already exist.
+    It creates a table to store participant names and their scores.
+    """
+    conn = sqlite3.connect('database.bd') #connect to the database file
+    c = conn.cursor() #cursor allows us to execute SQL commands
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS participants(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,    # Unique ID for each participant
+            name TEXT NOT NULL,                      # Participants name
+            score INTEGER NOT NULL DEFAULT 0         # Initial score (defaults to 0)
+            )
+    ''')
+    conn.commit()   # Saves changes
+    conn.close()    # Close the connection
 
-# Initialize the database and SocketIO (for real-time updates)
-db.init_app(app)
-socketio = SocketIO(app)
 
-
-# Home route for the landing page
+# Route for the main page
 @app.route('/')
-def home():
-    return render_template('index.html')  # Render the homepage
+def index():
+    """
+    This is the main page of the app. It fetched all the participants form the database
+    and displays them in descending order of their scores.
+    """
+    conn = sqlite3.connect('database.db')   # Connect to the database
+    c = conn.cursor()
+    c.execute('SELECT * FROM participants ORDER BY score DESC')     # Fetchs all the participants
+    participants = c.fetchall() # fetches the results
+    conn.close()    # closing the databas connection
+    return render_template('index.html', participants=participants)
 
+# Route to add a new participant
+@app.route('/add', methods=['POST'])
+def add_participant():
+    """
+    This handles the addition of new participants to the database.
+    It expects the participants name and initial scores from a form submission.
+    """
+    name = request.form['name'] # Get name from the form
+    score = int(request.form['score']) # Get the score from the form
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute('INSERT INTO participants (name, score) VALUES (?, ?)', (name, score))
+    conn.commit()
+    conn.close()
+    return redirect('/')    #redirect back to the main page
 
-# Login route for user authentication
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()  # Initialize login form
-    if form.validate_on_submit():  # If form is submitted and valid
-        # Check if the user exists and the password is correct
-        user = User.query.filter_by(username=form.username.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user)  # Log the user in
-            return redirect(url_for('dashboard'))  # Redirect to the dashboard
-        else:
-            flash('Invalid credentials')  # Show error if credentials are invalid
-    return render_template('login.html', form=form)  # Render login page
-
-
-# Restricted dashboard for coaches/admins
-@login_required  # Only logged-in users can access this route
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')  # Render the dashboard
-
-
-# Scoreboard route to display current standings
-@login_required
-@app.route('/scoreboard')
-def scoreboard():
-    teams = Team.query.all()  # Query all teams from the database
-    return render_template('scoreboard.html', teams=teams)  # Render the scoreboard
-
-
-# Route to input scores (accessible to coaches and admins only)
-@login_required
-@app.route('/input_scores', methods=['GET', 'POST'])
-def input_scores():
-    # Restrict access to only coaches and admins
-    if current_user.role not in ['coach', 'admin']:
-        return redirect(url_for('scoreboard'))  # Redirect non-authorized users to scoreboard
-
-    form = ScoreInputForm()  # Initialize score input form
-    if form.validate_on_submit():  # If form is submitted and valid
-        team = Team.query.get(form.team_id.data)  # Get the selected team
-        round_id = form.round_id.data  # Get the selected round
-        team.round_scores[round_id] = form.scores.data  # Store the scores for the team and round
-        db.session.commit()  # Save changes to the database
-
-        # Emit a socket.io event to notify all clients to refresh the scoreboard
-        socketio.emit('update_scoreboard')
-        return redirect(url_for('scoreboard'))  # Redirect back to the scoreboard
-
-    return render_template('input_scores.html', form=form)  # Render the score input form
-
-
-# Websocket handler for real-time updates to the scoreboard
-@socketio.on('connect')
-def handle_connect():
-    pass  # Placeholder for any logic when a user connects via WebSocket
-
-
-# Main entry point to run the Flask app with SocketIO
-if __name__ == "__main__":
-    socketio.run(app)  # Run the Flask-SocketIO server
+# Route to update an existing participant's score
+@app.route('/update', methods=['POST'])
+def update_score():
+    """
+    This will update the score of an existing participant in the database.
+    It expects participant IF and a new score from a form submission
+    """
