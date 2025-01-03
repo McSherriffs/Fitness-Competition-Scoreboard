@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Input Results</title>
     <!-- Link to external CSS file for styling -->
-    <link rel="stylesheet" href="{{ url_for('statis', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <!-- Header section -->
@@ -12,7 +12,28 @@
 
     <!-- Main content container -->
     <div class="container">
+        <!-- Form for submitting team scores -->
+        <form method="POST" action="{{ url_for('input_results') }}">
+            <!-- Dropdown to select team -->
+            <label for="team_name">Team:</label>
+            <select name="team_name" id="team_name">
+                {% for team in teams %}
+                <option value="{{ team.name }}">{{ team.name }}</option>
+                {% endfor %}
+            </select>
 
+            <!-- Input field for score -->
+            <label for="score">Score:</label>
+            <input type="number" name="score" id="score" required>
+
+            <!-- Submit button -->
+            <button type="submit">Submit</button>
+        </form>
+
+        <br>
+
+        <!-- Link back to the scoreboard -->
+        <a href="{{ url_for('index') }}">Back to Scoreboard</a>
     </div>
 </body>
 </html>

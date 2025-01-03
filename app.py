@@ -1,63 +1,45 @@
-from flask import Flask, render_template, request, redirect
-import sqlite3
+#  This is the core of the Flask application, where you’ll define routes for each page and logic for handling data.
+
+from flask import Flask, render_template, request, redirect, url_for
 
 #Initialise Flask app
-app = Flask(_name_)
+app = Flask(__name__)
 
-# Function to initialise the database (this should only run when the app starts)
-def init_db():
-    """
-    This function sets up the SQLite database if it doesn't already exist.
-    It creates a table to store participant names and their scores.
-    """
-    conn = sqlite3.connect('database.bd') #connect to the database file
-    c = conn.cursor() #cursor allows us to execute SQL commands
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS participants(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,    # Unique ID for each participant
-            name TEXT NOT NULL,                      # Participants name
-            score INTEGER NOT NULL DEFAULT 0         # Initial score (defaults to 0)
-            )
-    ''')
-    conn.commit()   # Saves changes
-    conn.close()    # Close the connection
+# Sample data structure to hold team information
+# Each team has a name and a score, starting at 0
+teams = [
+    {"name": "Team A", "score": 0},
+    {"name": "Team B", "score": 0},
+    {"name": "Team C", "score": 0},
+]
 
-
-# Route for the main page
+# Route for the main scoreboard
 @app.route('/')
 def index():
-    """
-    This is the main page of the app. It fetched all the participants form the database
-    and displays them in descending order of their scores.
-    """
-    conn = sqlite3.connect('database.db')   # Connect to the database
-    c = conn.cursor()
-    c.execute('SELECT * FROM participants ORDER BY score DESC')     # Fetchs all the participants
-    participants = c.fetchall() # fetches the results
-    conn.close()    # closing the databas connection
-    return render_template('index.html', participants=participants)
+    # Render the index.html template and pdd the team data
+    return render_template('index.html', teams=teams)
 
-# Route to add a new participant
-@app.route('/add', methods=['POST'])
-def add_participant():
-    """
-    This handles the addition of new participants to the database.
-    It expects the participants name and initial scores from a form submission.
-    """
-    name = request.form['name'] # Get name from the form
-    score = int(request.form['score']) # Get the score from the form
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    c.execute('INSERT INTO participants (name, score) VALUES (?, ?)', (name, score))
-    conn.commit()
-    conn.close()
-    return redirect('/')    #redirect back to the main page
+# Route for the input results page (for coaches top enter the scores)
+@app.route('/input-scores', methods=['GET', 'POST'])
+def input_results():
+    if request.method == 'POST':
+        # Retrieve data from the form submission
+        team_name = request.form.get("team_name")
+        score = int(request.form.get("score"))
 
-# Route to update an existing participant's score
-@app.route('/update', methods=['POST'])
-def update_score():
-    """
-    This will update the score of an existing participant in the database.
-    It expects participant IF and a new score from a form submission
-    """
-    particpant_id = int(request_forn['id'])
+        # Update the score for the specified team
+        for team in teams:
+            if team['name'] == team_name:
+                team['score'] += score
+
+       # Redirect back to the main scoreboard page after updating the score
+        return redirect(url_for('index'))
+
+    # Render the input_scores.html template, passing the teams list
+    return render_template('input_scores.html', teams=teams)
+
+
+
+
+
+
